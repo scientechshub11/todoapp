@@ -22,6 +22,7 @@ app.get('/testapi', async(req,res)=>{
     })
 })
 app.use('/api', todoRoutes)
-app.listen(port,()=>{
-    console.log(`app listen to the port:${port}`)
+// 👇 IMPORTANT: bind to 0.0.0.0
+app.listen(port, '0.0.0.0', () => {
+  console.log(`app listen to the port: ${port}`);
 });
