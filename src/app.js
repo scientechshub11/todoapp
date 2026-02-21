@@ -15,6 +15,12 @@ app.use(express.urlencoded({extended: true}));
             console.log("Db connection failed for postgres/rds")
         }
 }())
+app.get('/test-api', async(req,res)=>{
+    res.json({
+        code:200,
+        message:"success"
+    })
+})
 app.use('/api', todoRoutes)
 app.listen(port,()=>{
     console.log(`app listen to the port:${port}`)
