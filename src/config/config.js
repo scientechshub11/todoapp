@@ -1,6 +1,6 @@
 // src/config/config.js
 const { Sequelize } = require('sequelize');
-const todoModel = require('./models/todo');   // must match folder structure exactly
+const todoModel = require('./models/Todo');   // must match folder structure exactly
 require('dotenv').config();
 
 const sequelize = new Sequelize(
