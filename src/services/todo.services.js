@@ -1,8 +1,8 @@
-const db = require('../config/config')
+const db = require('../config/config');
 
 class TodoServices {
     constructor(){
-        //this.db = db;
+        this.db = db;
         this.todoModel = this.db.Todoapp;
 
     }
