@@ -1,6 +1,8 @@
-const {Sequelize} = require('sequelize');
-const todoModel = require('./models/todo');
+// src/config/config.js
+const { Sequelize } = require('sequelize');
+const todoModel = require('./models/todo');   // must match folder structure exactly
 require('dotenv').config();
+
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.POSTGRES_USER,
@@ -9,20 +11,16 @@ const sequelize = new Sequelize(
     host: process.env.POSTGRES_HOST,
     port: process.env.DB_PORT || 5432,
     dialect: 'postgres',
-    logging: false, // cleaner logs in prod
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
-    },
+    logging: false,
     dialectOptions: process.env.DB_SSL === 'true' ? {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
+      ssl: { require: true, rejectUnauthorized: false }
     } : {}
   }
 );
-const Todoapp = todoModel(sequelize, Sequelize)
-module.exports = {sequelize, Sequelize, Todoapp};
+
+// 🔴 CRITICAL: export name must be Todoapp
+const Todoapp = todoModel(sequelize, Sequelize);
+
+console.log('CONFIG EXPORTS KEYS:', Object.keys({ sequelize, Sequelize, Todoapp }));
+
+module.exports = { sequelize, Sequelize, Todoapp };

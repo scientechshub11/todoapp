@@ -1,15 +1,15 @@
+// src/services/todo.services.js
 const db = require('../config/config');
+console.log('DB IMPORT KEYS:', Object.keys(db || {}));
 
 class TodoServices {
-    constructor(){
-        this.db = db;
-        this.todoModel = this.db.Todoapp;
+  constructor() {
+    this.todoModel = db.Todoapp; // this was undefined before
+  }
 
-    }
-    async getList(){
-        let tododata = await this.todoModel.findAll({})
-        return tododata; 
-    }
+  async getList() {
+    return await this.todoModel.findAll();
+  }
 }
 
 module.exports = TodoServices;
