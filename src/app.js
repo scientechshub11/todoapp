@@ -6,16 +6,16 @@ const { sequelize } = require("./config/config");
 let port = process.env.port||7072;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-(async function initDb() {
-  try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-    console.log("✅ DB connected & synced");
-  } catch (err) {
-    console.error("❌ DB connection failed:", err); // <-- print real error
-    process.exit(1); // optional: fail fast so PM2 restarts once
-  }
-})();
+// (async function initDb() {
+//   try {
+//     await sequelize.authenticate();
+//     await sequelize.sync();
+//     console.log("✅ DB connected & synced");
+//   } catch (err) {
+//     console.error("❌ DB connection failed:", err); // <-- print real error
+//     process.exit(1); // optional: fail fast so PM2 restarts once
+//   }
+// })();
 app.get('/testapi', async(req,res)=>{
     res.json({
         code:200,

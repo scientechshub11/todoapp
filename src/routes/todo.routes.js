@@ -11,4 +11,14 @@ router.get('/todo', async(req, res)=>{
     })
 })
 
+router.post('/s3upload', async(req, res)=>{
+    let  content = req.body;
+    let data = await todoControllerObject.uploadToS3(content);
+    res.json({
+        code:200,
+        data,
+        message:"upload successfull!!!!!"
+    })
+})
+
 module.exports = router;
