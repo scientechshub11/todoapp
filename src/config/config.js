@@ -24,5 +24,5 @@ const sequelize = new Sequelize(
     } : {}
   }
 );
-const Todo = todoModel(sequelize, Sequelize)
-module.exports = {sequelize, Sequelize, Todo};
+const Todoapp = todoModel(sequelize, Sequelize)
+module.exports = {sequelize, Sequelize, Todoapp};
