@@ -19,8 +19,8 @@ const sequelize = new Sequelize(
 );
 
 // 🔴 CRITICAL: export name must be Todoapp
-const Todoapp = todoModel(sequelize, Sequelize);
+let Todo = todoModel(sequelize, Sequelize);
 
-console.log('CONFIG EXPORTS KEYS:', Object.keys({ sequelize, Sequelize, Todoapp }));
+console.log('CONFIG EXPORTS KEYS:', Object.keys({ sequelize, Sequelize, Todo }));
 
-module.exports = { sequelize, Sequelize, Todoapp };
+module.exports = { sequelize, Sequelize, Todo };

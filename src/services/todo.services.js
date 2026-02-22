@@ -4,10 +4,11 @@ console.log('DB IMPORT KEYS:', Object.keys(db || {}));
 
 class TodoServices {
   constructor() {
-    this.todoModel = db.Todoapp; // this was undefined before
+    this.todoModel = db.Todo; // this was undefined before
   }
 
   async getList() {
+    console.log("hello from services====>")
     return await this.todoModel.findAll();
   }
 }
