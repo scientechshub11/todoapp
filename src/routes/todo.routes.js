@@ -8,7 +8,6 @@ router.get('/todo', async(req, res)=>{
     res.json({
         message:"todo list is getting successfully!",
         data
-
     })
 })
 
