@@ -1,7 +1,7 @@
 
 let todoService = require('../services/todo.services');
 let todoServiceObject = new todoService()
-const {S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command} = require('@aws-sdk/client-s3');
+const {S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
 const REGION = 'ap-south-2';
 require('dotenv').config();
 const BUCKET='ecommerce-uploads-army-2026';
@@ -13,8 +13,9 @@ const s3 = new S3Client({
     // }
 });
 let filename = 'object-create-bucket'
+let newfilename = 'object-test-bucket'
 let key = `uploads/${Date.now()}-${filename}`;
-
+let testkey = `test/${Date.now()}-${newfilename}`
 class TodoController {
     constructor(){
 
@@ -35,12 +36,38 @@ class TodoController {
         let uploadtos3 = await s3.send(new PutObjectCommand(s3Object))
         return uploadtos3;
     }
-    async getFromS3(){
-        let uploadtos3 = await todoServiceObject.getList()
+    async uploadTestFileTos3(content){
+        content = JSON.stringify(content);
+        let s3Object = {
+            Bucket:BUCKET,
+            Key:testkey,
+            Body:content,
+            ContentType: "text/plain"
+        }
+        let uploadtos3 = await s3.send(new PutObjectCommand(s3Object));
         return uploadtos3;
     }
-    async deleteFromS3(){
-        let uploadtos3 = await todoServiceObject.getList()
+    async listFromS3(){
+        let getS3Object ={
+            Bucket:BUCKET
+        } 
+        let s3data = await s3.send(new ListObjectsV2Command(getS3Object))
+        return s3data;
+    }
+    async getFromS3(keyId){
+        let getS3Object ={
+            Bucket:BUCKET,
+            Key:keyId
+        } 
+        let s3data = await s3.send(new GetObjectCommand(getS3Object))
+        return s3data;
+    }
+    async deleteFromS3(keyId){
+        let deleteFromS3 = {
+            Bucket:BUCKET,
+            Key:keyId
+        }
+        let uploadtos3 = await s3.send(new DeleteObjectCommand(deleteFromS3))
         return uploadtos3;
     }
     async listFromS3(){
