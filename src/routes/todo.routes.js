@@ -3,6 +3,7 @@ const router = express.Router();
 let todoController = require('../controllers/todo.controller');
 let todoControllerObject = new todoController()
 
+
 router.get('/todo', async(req, res)=>{
     let data = await todoControllerObject.getList()
     res.json({
@@ -59,6 +60,36 @@ router.delete('/s3upload/:key', async(req, res)=>{
     })
 })
 
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({storage})
 
+router.post('/s3uploadImage', upload.single('image'), async(req, res)=>{
+    let file = req.file;
+    //console.log(file)
+    if(!req.file){
+        return res.json({message:"image file not found"});
+    }
+    let data = await todoControllerObject.putImageToS3(req.file);
+    res.json({
+        code:201,
+        data,
+        message:"get data from s3!!"
+    })
+})
+
+router.get('/getImageDetails/:keyId', async(req, res)=>{
+    try{
+        let keyId = req.params;
+        let data = await todoControllerObject.getImageDetails(keyId);
+        res.json({
+            code:201,
+            data,
+            message:"get data from s3!!"
+        })
+    }catch(err){
+        console.log(err)
+    }
+})
 
 module.exports = router;

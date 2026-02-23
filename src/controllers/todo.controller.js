@@ -13,9 +13,11 @@ const s3 = new S3Client({
     // }
 });
 let filename = 'object-create-bucket'
+let imageuploadfilename = 'object-file-upload'
 let newfilename = 'object-test-bucket'
 let key = `uploads/${Date.now()}-${filename}`;
 let testkey = `test/${Date.now()}-${newfilename}`
+let imageUploadKey = `image/${Date.now()}-${imageuploadfilename}`
 class TodoController {
     constructor(){
 
@@ -71,10 +73,29 @@ class TodoController {
         let uploadtos3 = await s3.send(new DeleteObjectCommand(deleteFromS3))
         return uploadtos3;
     }
-    // async listFromS3(){
-    //     let uploadtos3 = await todoServiceObject.getList()
-    //     return uploadtos3;
-    // }
+    async putImageToS3(file){
+        console.log(file)
+        //imageUploadKey
+        imageUploadKey = `uploads/${Date.now()}-${file.originalname}`;
+        let s3uploadobject = {
+            Bucket:BUCKET,
+            Key:imageUploadKey,
+            Body:file.buffer,
+            ContentType: file.mimetype
+
+        }
+        let uploadtos3 = await s3.send(new PutObjectCommand(s3uploadobject));
+        return uploadtos3;
+    }
+
+    async getImageDetails(keyId){
+        let getImageObject = {
+            Key:keyId,
+            Bucket:BUCKET
+        }
+        let getImageDetails = await s3.send(new GetObjectCommand(getImageObject));
+        return getImageDetails;
+    }
 
 }
 
