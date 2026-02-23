@@ -70,10 +70,10 @@ class TodoController {
         let uploadtos3 = await s3.send(new DeleteObjectCommand(deleteFromS3))
         return uploadtos3;
     }
-    async listFromS3(){
-        let uploadtos3 = await todoServiceObject.getList()
-        return uploadtos3;
-    }
+    // async listFromS3(){
+    //     let uploadtos3 = await todoServiceObject.getList()
+    //     return uploadtos3;
+    // }
 
 }
 
