@@ -118,14 +118,14 @@ class TodoController {
 
     async sendDataToSqs(imageKey, action){
         try{
-            let sqsurl = 'https://sqs.ap-south-2.amazonaws.com/395512255733/image-processing-queue'
+            let sqsUrl = 'https://sqs.ap-south-2.amazonaws.com/395512255733/image-processing-queue'
             let message = {
                 imageKey,
                 action,
                 createdAt: new Date().toISOString()
             }
             let sendtoqueue= await sqs.send(SendMessageCommand({
-                QueueUrl:sqsurl,
+                QueueUrl:sqsUrl,
                 MessageBody: JSON.stringify(message)
             }
             ))
