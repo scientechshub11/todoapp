@@ -90,6 +90,27 @@ router.get('/getImageDetails/:keyId', async(req, res)=>{
     }catch(err){
         console.log(err)
     }
+});
+
+router.get('/s3/presigned-url', async(req, res)=>{
+    try{
+        let {filename, contentType} = req.query;
+        let data = await todoControllerObject.getPresignedUrl(filename, contentType);
+        res.json(data);
+    }
+    catch(err){
+        console.log(err)
+    }
+});
+
+router.post('/send', async(req, res)=>{
+    let {imageKey, action} = req.body;
+    let data = await todoControllerObject.sendDataToSqs(imageKey, action);
+    res.json({
+        data,
+        code:200,
+        message:"Message Send To Queue!"
+    })
 })
 
 module.exports = router;

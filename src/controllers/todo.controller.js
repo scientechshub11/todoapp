@@ -1,7 +1,10 @@
 
 let todoService = require('../services/todo.services');
-let todoServiceObject = new todoService()
+let todoServiceObject = new todoService();
 const {S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
+const {getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+
+const {SQSClient, SendMessageCommand } = require('@aws-sdk/client-sqs')
 const REGION = 'ap-south-2';
 require('dotenv').config();
 const BUCKET='ecommerce-uploads-army-2026';
@@ -12,6 +15,7 @@ const s3 = new S3Client({
     //     secretAccessKey:process.env.AWS_ACCESS_KEY_ID
     // }
 });
+const sqs = new SQSClient({region:"ap-south-2"})
 let filename = 'object-create-bucket'
 let imageuploadfilename = 'object-file-upload'
 let newfilename = 'object-test-bucket'
@@ -95,8 +99,46 @@ class TodoController {
         }
         let getImageDetails = await s3.send(new GetObjectCommand(getImageObject));
         return getImageDetails;
-    }
+    };
 
+    async getPresignedUrl(filename, contentType){
+        let key = `uploads/${Date.now()}-${filename}`
+        const command = new PutObjectCommand({
+            Bucket:BUCKET,
+            Key: key,
+            ContentType:contentType 
+        })
+        let uploadUrl = await getSignedUrl(s3, command, {expiresIn: 300});
+        return{
+            uploadUrl,
+            key,
+            publicUrl: `https://${BUCKET}.s3.${REGION}.amazonaws.com/${key}`
+        }
+    };
+
+    async sendDataToSqs(imageKey, action){
+        try{
+            let sqsurl = 'https://sqs.ap-south-2.amazonaws.com/395512255733/image-processing-queue'
+            let message = {
+                imageKey,
+                action,
+                createdAt: new Date().toISOString()
+            }
+            let sendtoqueue= await sqs.send(SendMessageCommand({
+                QueueUrl:sqsurl,
+                MessageBody: JSON.stringify(message)
+            }
+            ))
+            return sendtoqueue
+        }
+        catch(err){
+            console.log(err)
+        }       
+    }
 }
+
+
+
+//https://sqs.ap-south-2.amazonaws.com/395512255733/image-processing-queue
 
 module.exports = TodoController;
