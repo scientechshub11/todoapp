@@ -125,10 +125,9 @@ class TodoController {
                 createdAt: new Date().toISOString()
             }
             let sendtoqueue= await sqs.send(SendMessageCommand({
-                QueueUrl:sqsUrl,
-                MessageBody: JSON.stringify(message)
-            }
-            ))
+                    QueueUrl:sqsUrl,
+                    MessageBody: JSON.stringify(message)
+            }))
             return sendtoqueue
         }
         catch(err){
