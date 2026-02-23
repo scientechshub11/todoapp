@@ -49,7 +49,8 @@ class TodoController {
     }
     async listFromS3(){
         let getS3Object ={
-            Bucket:BUCKET
+            Bucket:BUCKET,
+            Prefix: 'uploads/'
         } 
         let s3data = await s3.send(new ListObjectsV2Command(getS3Object))
         return s3data;
